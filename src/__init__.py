@@ -1,19 +1,17 @@
 import time
-import asyncio
 import nest_asyncio
-from pyrogram import Client
 from motor.motor_asyncio import AsyncIOMotorClient
-
 import config
 
-# asyncio loop ကို ပုံမှန်ဖြစ်အောင် nest_asyncio နဲ့ ချိတ်ပေးခြင်း
+# asyncio loop ကို အရင်ပြင်ပေးမယ်
 nest_asyncio.apply()
 
 # MongoDB connection
 db = AsyncIOMotorClient(config.MONGO_URL).Anonymous
-
-# Uptime tracking
 START_TIME = time.time()
+
+# ဒီနေရာမှာ Client ကို Import မလုပ်ပါနဲ့
+from pyrogram import Client 
 
 class Bot(Client):
     def __init__(self):
@@ -35,4 +33,5 @@ class Bot(Client):
     async def stop(self, *args, **kwargs):
         await super().stop(*args, **kwargs)
 
+# ဒီ app ကို __main__.py ကနေမှ ခေါ်သုံးမှာပါ
 app = Bot()
