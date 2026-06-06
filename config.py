@@ -14,7 +14,7 @@ OWNER_ID = int(getenv("OWNER_ID"))
 LOGGER_ID = int(getenv("LOGGER_ID"))
 
 # MongoDB configuration
-MONGO_URL = getenv("MONGO_URL")
+MONGO_URL = "mongodb+srv://" + getenv("MONGO_URL")
 
 # Channel and subscription settings
 AUTH_CHANNEL = int(getenv("AUTH_CHANNEL"))
