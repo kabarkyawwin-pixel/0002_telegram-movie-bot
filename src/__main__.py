@@ -48,6 +48,8 @@ async def boot():
 
 if __name__ == "__main__":
     try:
-        asyncio.get_event_loop().run_until_complete(boot())
+        asyncio.run(boot())
     except KeyboardInterrupt:
         LOGGER(__name__).warning("Bot interrupted by user or system.")
+    except Exception as e:
+        LOGGER(__name__).error(f"Bot failed to start: {e}")
