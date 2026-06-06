@@ -1,6 +1,5 @@
 import asyncio
 import importlib
-import sys
 
 from pyrogram import idle, errors
 from pyrogram.enums import ChatMemberStatus
@@ -9,13 +8,11 @@ from src import app, config
 from src.modules import ALL_MODULES
 from src.logging import LOGGER
 
-
 async def boot():
     LOGGER(__name__).info("Bot is starting...")
-    await asyncio.sleep(2)  # ဒီလိုင်းလေးထည့်ပါ
-    await app.start()
-    # ... ကျန်တာကို မပြင်နဲ့တော့ ..
-    LOGGER(__name__).info("Bot is starting...")
+    
+    # ပိုနေတဲ့ စာကြောင်းတွေကို ဖျက်ပြီး တစ်ကြိမ်ပဲ ထားထားပါတယ်
+    await asyncio.sleep(2)
     await app.start()
     LOGGER(__name__).info("Bot started successfully.")
 
@@ -42,6 +39,8 @@ async def boot():
 
     for module in ALL_MODULES:
         importlib.import_module(f"src.modules.{module}")
+    
+    LOGGER(__name__).info("All modules loaded successfully.")
 
     try:
         await idle()
@@ -49,10 +48,10 @@ async def boot():
         LOGGER(__name__).warning("Bot is shutting down...")
         await app.stop()
 
-
 if __name__ == "__main__":
     try:
-        asyncio.get_event_loop().run_until_complete(boot())
+        # asyncio.run ကို သုံးခြင်းက Python 3.10+ အတွက် ပိုပြီးတည်ငြိမ်ပါတယ်
+        asyncio.run(boot())
     except KeyboardInterrupt:
         LOGGER(__name__).warning("Bot interrupted by user or system.")
     except Exception as e:
