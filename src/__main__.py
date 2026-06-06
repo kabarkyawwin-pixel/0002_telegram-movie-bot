@@ -12,6 +12,10 @@ from src.logging import LOGGER
 
 async def boot():
     LOGGER(__name__).info("Bot is starting...")
+    await asyncio.sleep(2)  # ဒီလိုင်းလေးထည့်ပါ
+    await app.start()
+    # ... ကျန်တာကို မပြင်နဲ့တော့ ..
+    LOGGER(__name__).info("Bot is starting...")
     await app.start()
     LOGGER(__name__).info("Bot started successfully.")
 
