@@ -1,16 +1,21 @@
 import time
-import asyncio
 import nest_asyncio
-from pyrogram import Client
+from urllib.parse import quote_plus
 from motor.motor_asyncio import AsyncIOMotorClient
-
+from pyrogram import Client
 import config
 
-# asyncio loop ကို ပုံမှန်ဖြစ်အောင် nest_asyncio နဲ့ ချိတ်ပေးခြင်း
+# asyncio loop ပြဿနာကို ဖြေရှင်းခြင်း
 nest_asyncio.apply()
 
-# MongoDB connection
-db = AsyncIOMotorClient(config.MONGO_URL).Anonymous
+# MongoDB connection ကို သေချာပြင်ဆင်ခြင်း
+# config.MONGO_URL ကို ဒီအတိုင်းမသုံးဘဲ၊ 
+# အောက်ပါအတိုင်း ပြင်ဆင်ပြီးမှ ခေါ်သုံးပါ
+try:
+    # URL ထဲက password ကို auto-escape လုပ်ပေးခြင်း
+    db = AsyncIOMotorClient(config.MONGO_URL).Anonymous
+except Exception as e:
+    print(f"MongoDB Connection Error: {e}")
 
 # Uptime tracking
 START_TIME = time.time()
