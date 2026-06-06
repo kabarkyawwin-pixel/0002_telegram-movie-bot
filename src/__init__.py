@@ -1,15 +1,19 @@
 import time
+import asyncio
+import nest_asyncio
 from pyrogram import Client
 from motor.motor_asyncio import AsyncIOMotorClient
 
 import config
+
+# asyncio loop ကို ပုံမှန်ဖြစ်အောင် nest_asyncio နဲ့ ချိတ်ပေးခြင်း
+nest_asyncio.apply()
 
 # MongoDB connection
 db = AsyncIOMotorClient(config.MONGO_URL).Anonymous
 
 # Uptime tracking
 START_TIME = time.time()
-
 
 class Bot(Client):
     def __init__(self):
@@ -27,11 +31,8 @@ class Bot(Client):
         self.id = me.id
         self.name = me.first_name
         self.username = me.username
-   
-
+    
     async def stop(self, *args, **kwargs):
         await super().stop(*args, **kwargs)
-  
-
 
 app = Bot()
