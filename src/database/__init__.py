@@ -1,19 +1,38 @@
-from umongo.frameworks.motor_asyncio import MotorAsyncIOInstance
+import time
+import asyncio
+import nest_asyncio
+from pyrogram import Client
 from motor.motor_asyncio import AsyncIOMotorClient
+
 import config
 
-# Asynchronous Database Connection
-MoviesDB = AsyncIOMotorClient(config.MONGO_URL)
+# asyncio loop ကို ပုံမှန်ဖြစ်အောင် nest_asyncio နဲ့ ချိတ်ပေးခြင်း
+nest_asyncio.apply()
 
-# Database
-db = MoviesDB["MoviesBot1"]
-instance = MotorAsyncIOInstance(db)
+# MongoDB connection
+db = AsyncIOMotorClient(config.MONGO_URL).Anonymous
 
+# Uptime tracking
+START_TIME = time.time()
 
-# Collections
-usersdb = db["users"]  # Users Collection
-chatsdb = db["chats"]  # Chats Collection
+class Bot(Client):
+    def __init__(self):
+        super().__init__(
+            name="MoviesBot",
+            api_id=config.API_ID,
+            api_hash=config.API_HASH,
+            bot_token=config.BOT_TOKEN,
+            max_concurrent_transmissions=7,
+        )
 
+    async def start(self, *args, **kwargs):
+        await super().start(*args, **kwargs)
+        me = await self.get_me()
+        self.id = me.id
+        self.name = me.first_name
+        self.username = me.username
+    
+    async def stop(self, *args, **kwargs):
+        await super().stop(*args, **kwargs)
 
-# Importing other modules
-from .chats import *
+app = Bot()
